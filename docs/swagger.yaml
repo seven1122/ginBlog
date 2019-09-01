@@ -1,0 +1,16 @@
+basePath: api/v1
+host: petstore.swagger.io
+info:
+  contact:
+    email: 931880645@qq.com
+    name: seven007
+    url: http://www.swagger.io/support
+  description: include all blog apis
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: ginBlog APIS
+  version: "1.0"
+paths: {}
+swagger: "2.0"
