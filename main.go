@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"seven1122/ginBlog/pkg/logging"
 
 	"seven1122/ginBlog/models"
 	"seven1122/ginBlog/pkg/setting"
@@ -24,13 +25,17 @@ import (
 // @host petstore.swagger.io
 // @BasePath api/v1
 func main() {
+	setting.Setup()
+	models.Setup()
+	logging.Setup()
+
 	router := routers.InitRouter()
 
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.HTTPPort),
+		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
 		Handler:        router,
-		ReadTimeout:    setting.ReadTimeout,
-		WriteTimeout:   setting.WriteTimeout,
+		ReadTimeout:    setting.ServerSetting.ReadTimeout,
+		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 

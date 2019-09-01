@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"github.com/robfig/cron"
 	"seven1122/ginBlog/models"
@@ -31,3 +32,4 @@ func main()  {
 		}
 	}
 }
+*/

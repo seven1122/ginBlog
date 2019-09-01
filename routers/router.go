@@ -24,7 +24,7 @@ func InitRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 
-	gin.SetMode(setting.RunMode)
+	gin.SetMode(setting.ServerSetting.RunMode)
 	apiV1 := r.Group("api/v1")
 	apiV1.Use(jwt.JWT())
 	{

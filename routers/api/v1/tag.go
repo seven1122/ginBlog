@@ -12,30 +12,30 @@ import (
 	"seven1122/ginBlog/pkg/utils"
 )
 
-func GetTags(c *gin.Context)  {
+func GetTags(c *gin.Context) {
 	name := c.Query("name")
 	maps := make(map[string]interface{})
 	data := make(map[string]interface{})
-	if name != ""{
+	if name != "" {
 		maps["name"] = name
 	}
 	var state int = -1
-	if arg := c.Query("state"); arg != ""{
-		state, _  = com.StrTo(arg).Int()
+	if arg := c.Query("state"); arg != "" {
+		state, _ = com.StrTo(arg).Int()
 		maps["state"] = state
 	}
 
-	data["list"] = models.GetTags(utils.GetPage(c), setting.PageSize, maps)
+	data["list"] = models.GetTags(utils.GetPage(c), setting.AppSetting.PageSize, maps)
 	data["total"] = models.GetTagCount(maps)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": erorrs.SUCCESS,
-		"msg": erorrs.GetMsg(erorrs.SUCCESS),
-		"data":data,
+		"msg":  erorrs.GetMsg(erorrs.SUCCESS),
+		"data": data,
 	})
 }
 
-func AddTag(c *gin.Context){
+func AddTag(c *gin.Context) {
 	name := c.PostForm("name")
 	state, _ := com.StrTo(c.DefaultPostForm("state", "0")).Int()
 	createdBy := c.PostForm("created_by")
@@ -48,26 +48,26 @@ func AddTag(c *gin.Context){
 	valid.Range(state, 0, 1, "state").Message("状态值只能是0或者1")
 
 	code := erorrs.INVALID_PARAMS
-	if !valid.HasErrors(){
-		if ! models.ExistTagByName(name){
+	if !valid.HasErrors() {
+		if !models.ExistTagByName(name) {
 			code = erorrs.SUCCESS
 			models.AddTag(name, state, createdBy)
-		}else {
+		} else {
 			code = erorrs.ERROR_EXIST_TAG
 		}
-	}else {
-		for _, err := range valid.Errors{
+	} else {
+		for _, err := range valid.Errors {
 			logging.Error(err.Key, err.Message)
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": erorrs.GetMsg(code),
+		"msg":  erorrs.GetMsg(code),
 		"data": make(map[string]string),
 	})
 }
 
-func EditTag(c *gin.Context)  {
+func EditTag(c *gin.Context) {
 	id, _ := com.StrTo(c.Param("id")).Int()
 	name := c.PostForm("name")
 	modifiedBy := c.PostForm("modified_by")
@@ -83,48 +83,48 @@ func EditTag(c *gin.Context)  {
 	valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人不能超过100长度")
 	valid.MaxSize(name, 100, "name").Message("名称最长不要超过100")
 	code := erorrs.INVALID_PARAMS
-	if !valid.HasErrors(){
+	if !valid.HasErrors() {
 		code = erorrs.SUCCESS
-		if models.ExistTagByID(id){
+		if models.ExistTagByID(id) {
 			data := make(map[string]interface{})
 			data["modified_by"] = modifiedBy
-			if name != ""{
+			if name != "" {
 				data["name"] = name
 			}
 			if state != -1 {
 				data["state"] = state
 			}
 			models.EditTag(id, data)
-		}else{
+		} else {
 			code = erorrs.ERROR_NOT_EXIST_TAG
 		}
-	}else{
-		for _, err := range valid.Errors{
+	} else {
+		for _, err := range valid.Errors {
 			logging.Error(err.Key, err.Message)
 		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": erorrs.GetMsg(code),
+		"msg":  erorrs.GetMsg(code),
 		"data": make(map[string]string),
 	})
 }
 
-func DeleteTag(c *gin.Context)  {
+func DeleteTag(c *gin.Context) {
 	id, _ := com.StrTo(c.Param("id")).Int()
 	valid := validation.Validation{}
 	valid.Min(id, 1, "").Message("ID必须大于0")
 	code := erorrs.INVALID_PARAMS
-	if ! valid.HasErrors(){
+	if !valid.HasErrors() {
 		code = erorrs.SUCCESS
-		if models.ExistTagByID(id){
+		if models.ExistTagByID(id) {
 			models.DeleteTag(id)
-		}else{
+		} else {
 			code = erorrs.ERROR_NOT_EXIST_TAG
 		}
-	}else {
-		for _, err := range valid.Errors{
+	} else {
+		for _, err := range valid.Errors {
 			logging.Error(err.Key, err.Message)
 		}
 	}
