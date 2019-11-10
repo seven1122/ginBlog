@@ -14,6 +14,7 @@ type Article struct {
 	ViewCount int `json:"view_count"`
 	CommentCount int `json:"comment_count"`
 	PraiseCount int `json:"praise_count"`
+	CoverImageUrl string `json:"cover_image_url"`
 }
 /*
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {

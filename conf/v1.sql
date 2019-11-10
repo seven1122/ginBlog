@@ -22,6 +22,7 @@ CREATE TABLE `blog`.`blog_article` (
   `view_count` int(10) unsigned default '0' COMMENT '查看数',
   `comment_count` int(10) unsigned default '0' COMMENT '评论数',
   `praise_count` int(10) unsigned default '0' COMMENT '点赞数',
+  `cover_image_url` varchar(255)  default '' COMMENT '封面图片地址',
   `add_dt` int(10) unsigned DEFAULT '0' COMMENT '添加时间',
   `created_by` varchar(100) DEFAULT '' COMMENT '创建人',
   `update_dt` int(10) unsigned DEFAULT '0' COMMENT '修改时间',

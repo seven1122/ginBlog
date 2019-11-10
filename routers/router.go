@@ -2,10 +2,11 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
-
 	_ "github.com/swaggo/gin-swagger/example/basic/docs"
+	"net/http"
+	"seven1122/ginBlog/pkg/upload"
 
 	"seven1122/ginBlog/middleware/jwt"
 	"seven1122/ginBlog/routers/api"
@@ -16,6 +17,7 @@ import (
 
 func InitRouter() *gin.Engine {
 	r := gin.New()
+	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
@@ -45,6 +47,7 @@ func InitRouter() *gin.Engine {
 		})
 	})
 	r.POST("/auth", api.GetAuth)
+	r.POST("/upload", api.UploadImage)
 
 	return r
 }
